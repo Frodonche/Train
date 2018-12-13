@@ -6,6 +6,7 @@
 package trains.src;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 /**
  *
@@ -21,6 +22,24 @@ public class Modele {
     
     public static Modele getInstance(){
         return INSTANCE;
+    }
+    
+    public void addTrain(int identifiant, String villeDepart, String villeArrivee, Date dateDepart, int heureDepart, int prixBillet, int places){
+        Train tmp = searchTrain(identifiant);
+        if(tmp == null){
+            tmp = new Train(identifiant, villeDepart, villeArrivee, dateDepart, heureDepart, prixBillet, places);
+            myTrains.add(tmp);
+        }
+    }
+
+        
+    public Train searchTrain(int identifiant){
+        for(Train t: myTrains){
+            if(t.getIdentifiant() == identifiant){
+                return t;
+            }
+        }
+        return null;
     }
     
 }
