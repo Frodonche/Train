@@ -30,6 +30,17 @@ public class TrainWebService {
         return "Hello " + txt + " !";
     }
 
+    @WebMethod(operationName = "listTrains")
+    public String listTrains() throws ParseException {
+        Modele m = Modele.getInstance();
+        String ts = "";
+        for(Train t : m.listTrains()){
+            ts += t.toString() + "\n";
+            System.out.println(t);
+        }
+        return ts;
+    }
+
     /**
      * Web service operation
      */
@@ -39,7 +50,6 @@ public class TrainWebService {
         Modele m = Modele.getInstance();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date parse = dateFormat.parse(dateDepart);
-        System.out.println(dateDepart);
         if(parse.before(new Date())){
             return "dateDepart must be later than current Date";
         } else {
@@ -47,4 +57,18 @@ public class TrainWebService {
             return "Ok";
         }
     }
+    
+        /**
+     * Web service operation
+     */
+    @WebMethod(operationName = "rechercheTrain")
+    public String rechercheTrain(@WebParam(name = "villeDepart") String villeDepart, @WebParam(name = "villeArrivee") String villeArrivee, @WebParam(name = "heureDepart") int heureDepart) throws ParseException {        
+        Modele m = Modele.getInstance();
+        String ts = "";
+        for(Train t : m.rechercheTrain(villeArrivee, villeDepart, heureDepart)){
+            ts += t.toString() + "\n";
+        }
+        return ts;
+    }
+
 }

@@ -142,4 +142,24 @@ public class Modele {
         return trains;
     }
 
+    public ArrayList<Train> listTrains(){
+        ArrayList<Train> trains = new ArrayList<>();
+        for(Train t: myTrains){
+                trains.add(t);           
+        }
+        return trains;
+    }
+
+    ArrayList<Train> rechercheTrain(String villeArrivee, String villeDepart, int heureDepart) {
+        ArrayList<Train> trains = new ArrayList<>();
+        for(Train t: myTrains){
+            if(t.getVilleArrivee().equals(villeArrivee)
+                    && t.getVilleDepart().equals(villeDepart)
+                    && t.getHeureDepart() == heureDepart){
+                trains.add(t);           
+            }
+        }
+        return trains;
+    }
+
 }

@@ -60,4 +60,12 @@ public class Train {
         return places;
     }
     
+    public String toString(){
+        return this.identifiant + " " +
+               this.villeDepart + " " +
+               this.villeArrivee + " " +
+               this.heureDepart + " " +
+               this.prixBillet + " " +
+               this.places + " \n";
+    }
 }
