@@ -5,7 +5,12 @@
  */
 package trains.src;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.jws.WebService;
 import javax.jws.WebMethod;
 import javax.jws.WebParam;
@@ -29,12 +34,16 @@ public class TrainWebService {
      * Web service operation
      */
     @WebMethod(operationName = "addTrain")
-    public String addTrain(@WebParam(name = "identifiant") int identifiant, @WebParam(name = "villeDepart") String villeDepart, @WebParam(name = "villeArrivee") String villeArrivee, @WebParam(name = "dateDepart") Date dateDepart, @WebParam(name = "heureDepart") int heureDepart, @WebParam(name = "prixBillet") int prixBillet, @WebParam(name = "places") int places) {
+    public String addTrain(@WebParam(name = "identifiant") int identifiant, @WebParam(name = "villeDepart") String villeDepart, @WebParam(name = "villeArrivee") String villeArrivee, @WebParam(name = "dateDepart") String dateDepart, @WebParam(name = "heureDepart") int heureDepart, @WebParam(name = "prixBillet") int prixBillet, @WebParam(name = "places") int places) throws ParseException {
+        
         Modele m = Modele.getInstance();
-        if(dateDepart.before(new Date())){
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date parse = dateFormat.parse(dateDepart);
+        System.out.println(dateDepart);
+        if(parse.before(new Date())){
             return "dateDepart must be later than current Date";
         } else {
-            m.addTrain(identifiant, villeDepart, villeArrivee, dateDepart, heureDepart, prixBillet, places);
+            m.addTrain(identifiant, villeDepart, villeArrivee, parse, heureDepart, prixBillet, places);
             return "Ok";
         }
     }

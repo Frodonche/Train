@@ -5,9 +5,15 @@
  */
 package trains.src;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -16,15 +22,35 @@ import java.util.List;
 public class Modele {
     private static Modele INSTANCE = new Modele();
     private ArrayList<Train> myTrains;
-    
+    private String URL = "jdbc:derby://localhost:1527/trains";
+    private String login = "root";
+    private String mdp = "root";
+    private Connection con ;
+    private Statement stmt ;
+
     public Modele(){
         this.myTrains = new ArrayList<Train>();
+        try {
+            con = DriverManager.getConnection(URL, login,mdp);
+            stmt = con.createStatement();
+        } catch (SQLException ex) {
+            Logger.getLogger(Modele.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public static Modele getInstance(){
         return INSTANCE;
     }
     
+    public void updateRequest (String SQL){
+        try { 
+            stmt = con.createStatement();
+            stmt.executeUpdate(SQL);
+        } catch (SQLException ex) {
+            Logger.getLogger(Modele.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+
     public String createSQLSelect(List<String> select, String from, List<String> where){
         String ret="";
         ret = "select ";
