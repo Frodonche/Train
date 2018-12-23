@@ -17,11 +17,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Trains Page</title>
     </head>
     <body>
         <h1>Liste des trains disponibles : </h1>
-           <form method="post" action="ReservationServlet"> <!-- Formulaire permettant l'affichage des radio button et de la confirmation de la reservation -->
+           <form method="post" action="reservation.jsp"> <!-- Formulaire permettant l'affichage des radio button et de la confirmation de la reservation -->
             <table>
             <tr>
                 <th></th>
