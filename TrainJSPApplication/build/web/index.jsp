@@ -46,7 +46,7 @@
                 Document doc = builder.parse(new InputSource(new StringReader(result)));		
                 doc.getDocumentElement().normalize();
                 
-                NodeList nList = doc.getElementsByTagName("trains");
+                NodeList nList = doc.getElementsByTagName("train");
                 
 //                out.println(result);
 
