@@ -20,6 +20,9 @@
         <title>Reservation Page</title>
     </head>
     <body>
-        <p> Reservation effectuee ! </p>
+        <p> Reservation effectuee sur le train avec l'identifiant <%= request.getParameter("identifiant_train") %> ! </p>
+        
+        <%  %>
+        
     </body>
 </html>
