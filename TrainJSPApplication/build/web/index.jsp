@@ -24,6 +24,7 @@
            <form method="post" action="ReservationServlet"> <!-- Formulaire permettant l'affichage des radio button et de la confirmation de la reservation -->
             <table>
             <tr>
+                <th></th>
               <th>Identifiant</th>
               <th>ville de départ</th>
               <th>Ville d'arrivée</th>
