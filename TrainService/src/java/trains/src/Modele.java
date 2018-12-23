@@ -7,10 +7,12 @@ package trains.src;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
-import java.util.Date;
+import java.sql.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -22,7 +24,8 @@ import java.util.logging.Logger;
 public class Modele {
     private static Modele INSTANCE = new Modele();
     private ArrayList<Train> myTrains;
-    private String URL = "jdbc:derby://localhost:1527/trains";
+    private ArrayList<Reservation> myReservations;
+    private String URL = "jdbc:derby://localhost:1527/train";
     private String login = "root";
     private String mdp = "root";
     private Connection con ;
@@ -30,12 +33,15 @@ public class Modele {
 
     public Modele(){
         this.myTrains = new ArrayList<Train>();
+        this.myReservations = new ArrayList<Reservation>();
         try {
             con = DriverManager.getConnection(URL, login,mdp);
             stmt = con.createStatement();
         } catch (SQLException ex) {
             Logger.getLogger(Modele.class.getName()).log(Level.SEVERE, null, ex);
         }
+        this.updateTrainList();
+        this.updateReservationList();
     }
     
     public static Modele getInstance(){
@@ -50,69 +56,56 @@ public class Modele {
             Logger.getLogger(Modele.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
-    public String createSQLSelect(List<String> select, String from, List<String> where){
-        String ret="";
-        ret = "select ";
-        int i = 0;
-        while(i<select.size()){
-            ret = ret + select.get(i);
-            i++;
-            if(i<select.size())ret = ret + ", ";
-        }
-        ret = ret + " from "+from;
-        i = 0;
-        if (where.size()>0)ret = ret + " where ";
-        while(i<where.size()){
-            ret = ret + where.get(i)+ " = " +where.get(i);
-            i++;
-            if(i<where.size())ret = ret + " and ";
-        }
-        return ret;
-    }
-    
-    public String createSQLUpdate(List<String> set, String from, List<String> where){
-        String ret="";
-        ret = "update " + from;
-        int i = 0;
-        if(set.size()>0)ret = ret + " set ";
-        while(i<set.size()){
-            ret = ret + set.get(i) + " = " + set.get(i);
-            i++;
-            if(i<set.size())ret = ret + ", ";
-        }
-        i = 0;
-        if (where.size()>0)ret = ret + " where ";
-        while(i<where.size()){
-            ret = ret + where.get(i)+ " = " +where.get(i);
-            i++;
-            if(i<where.size())ret = ret + " and ";
-        }
-        return ret;
-    }
-    
-        public String createSQLDelete(String from, List<String> where){
-        String ret="";
-        ret = "delete from "+ from+" ";
-        int i = 0;
-        if (where.size()>0)ret = ret + " where ";
-        while(i<where.size()){
-            ret = ret + where.get(i)+ " = " +where.get(i);
-            i++;
-            if(i<where.size())ret = ret + " and ";
-        }
-        return ret;
-    }
     
     public void addTrain(int identifiant, String villeDepart, String villeArrivee, Date dateDepart, int heureDepart, int prixBillet, int places){
-        Train tmp = searchTrain(identifiant);
-        if(tmp == null){
-            tmp = new Train(identifiant, villeDepart, villeArrivee, dateDepart, heureDepart, prixBillet, places);
-            myTrains.add(tmp);
-        }
+        addTrainSQL(identifiant,villeDepart,villeArrivee,dateDepart,heureDepart,prixBillet,places);
+        this.updateTrainList();
     }
 
-        
+    private void addTrainSQL(int identifiant, String villeDepart, String villeArrivee, Date dateDepart, int heureDepart, int prixBillet, int places){
+        PreparedStatement pstmt = null;
+        try
+        {
+            pstmt = con.prepareStatement("insert into train (ville_depart, ville_arrivee, date, heure_depart, prix_billet, nb_places_dispo) values ( ? , ? , ? , ? , ?, ? )");
+            pstmt.setString(1, villeDepart);
+            pstmt.setString(2, villeArrivee);
+            pstmt.setDate(3, dateDepart);
+            pstmt.setInt(4, (heureDepart));
+            pstmt.setInt(5, (prixBillet));
+            pstmt.setInt(6, (places));
+            pstmt.executeUpdate();
+            this.updateTrainList();
+        }
+        catch (Exception e)
+        {}
+    }    
+    
+    private void updateTrainList(){
+        String SQL = "select * from train";
+        myTrains = new ArrayList<>();
+        Train tmp;
+        String ville_dep,ville_arr;
+        int id, prix, nb_places, heure_dep;
+        Date date;
+        try { 
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery( SQL ); 
+            while ( rs.next( ) ) {
+            
+                    id = rs.getInt("id");
+                    prix = rs.getInt("prix_billet");
+                    nb_places = rs.getInt("nb_places_dispo");
+                    ville_dep = rs.getString("ville_depart");
+                    ville_arr = rs.getString("ville_arrivee");
+                    heure_dep = rs.getInt("heure_depart");
+                    date = new Date(Date.parse(rs.getString("date")));
+                    tmp = new Train(id, ville_dep, ville_arr, date, heure_dep, prix, nb_places);
+                    myTrains.add(tmp);
+                } 
+        } catch (SQLException ex) {
+            Logger.getLogger(Modele.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
     public Train searchTrain(int identifiant){
         for(Train t: myTrains){
             if(t.getIdentifiant() == identifiant){
@@ -160,6 +153,77 @@ public class Modele {
             }
         }
         return trains;
+    }
+    public Train existTrain(int id){
+        Train tmp=null;
+        for(Train t: myTrains){
+            if(t.getIdentifiant()==id)tmp=t;
+        }
+        if(tmp!=null)return tmp;
+        return null;
+    }
+    
+    private void updateReservationList(){
+        String SQL = "select * from reservation";
+        myReservations = new ArrayList<>();
+        Reservation tmp;
+        int id_res,id_train, num_place;
+        try { 
+            stmt = con.createStatement();
+            ResultSet rs = stmt.executeQuery( SQL ); 
+            while ( rs.next( ) ) {
+                    id_res = rs.getInt("id_reservation");
+                    id_train = rs.getInt("id_train");
+                    num_place = rs.getInt("numero_place");
+                    tmp = new Reservation(id_res, id_train, num_place);
+                    myReservations.add(tmp);
+                } 
+        } catch (SQLException ex) {
+            Logger.getLogger(Modele.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    public Reservation rechercheReservation(int id_res){
+        Reservation tmp;
+        tmp = null;
+        for(Reservation r : myReservations){
+            if( r.getIdReservation() == id_res){
+                tmp = r;
+            }
+        }
+        if (tmp != null)return tmp;
+        return null;
+    }
+    
+    public ArrayList<Reservation> listReservations(){
+        return this.myReservations;
+    }
+    
+    public void addReservation(int id_res, int id_train, int num_place){
+        addReservationSQL(id_res,id_train,num_place);
+    }
+    
+    private void addReservationSQL(int id_res, int id_train, int num_place){
+        PreparedStatement pstmt = null;
+        Train tmp = this.existTrain(id_train);
+        if(tmp!=null)
+        try
+        {
+            int nb_places = tmp.getPlaces()-1;
+            pstmt = con.prepareStatement("insert into reservation values ( ? , ? , ?)");
+            pstmt.setInt(1, id_res);
+            pstmt.setInt(2, id_train);
+            pstmt.setInt(3, num_place);
+            pstmt.executeUpdate();
+            this.updateReservationList();
+            pstmt = con.prepareStatement("update train set nb_places_dispo=? where id=?");
+            pstmt.setInt(1, nb_places);
+            pstmt.setInt(2, id_train);
+            pstmt.executeUpdate();
+            this.updateTrainList();
+        }
+        catch (Exception e)
+        {}
     }
 
 }

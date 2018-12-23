@@ -50,10 +50,11 @@ public class TrainWebService {
         Modele m = Modele.getInstance();
         DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         Date parse = dateFormat.parse(dateDepart);
+        java.sql.Date parseSQL = new java.sql.Date(parse.getTime());
         if(parse.before(new Date())){
             return "dateDepart must be later than current Date";
         } else {
-            m.addTrain(identifiant, villeDepart, villeArrivee, parse, heureDepart, prixBillet, places);
+            m.addTrain(identifiant, villeDepart, villeArrivee, parseSQL, heureDepart, prixBillet, places);
             return "Ok";
         }
     }
