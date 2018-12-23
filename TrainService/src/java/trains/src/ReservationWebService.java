@@ -31,22 +31,21 @@ public class ReservationWebService {
     @WebMethod(operationName = "listReservations")
     public String listReservations() throws ParseException {
         Modele m = Modele.getInstance();
-        String ts = "";
+        String ts = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><reservations>";
         for(Reservation r : m.listReservations()){
-            ts += r.toString() + "\n";
-            System.out.println(ts);
+            ts += r.toXML();
         }
-        return ts;
+        return ts+"</reservations>";
     }
 
     /**
      * Web service operation
      */
     @WebMethod(operationName = "addReservation")
-    public String addReservation(@WebParam(name = "identifiant_reservation") int identifiant_reservation, @WebParam(name = "identifiant_train") int id_train, @WebParam(name = "numero_place") int numero_place) throws ParseException {
-        Modele m = Modele.getInstance();
-        m.addReservation(identifiant_reservation,id_train,numero_place);
-        return "reservation OK !";
+    public String addReservation(@WebParam(name = "identifiant_train") int id_train) throws ParseException {        
+            Modele m = Modele.getInstance();
+            m.addReservation(id_train);
+            return "reservation OK !";
     }
     
         /**
@@ -55,9 +54,9 @@ public class ReservationWebService {
     @WebMethod(operationName = "rechercheReservation")
     public String rechercheReservation(@WebParam(name = "identifiant_reservation") int id_reservation) throws ParseException {        
         Modele m = Modele.getInstance();
-        String ts = "";
-        ts = m.rechercheReservation(id_reservation).toString();
-        return ts;
+        String ts = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><trains>";
+        if(m.rechercheReservation(id_reservation)!=null)ts = m.rechercheReservation(id_reservation).toXML();
+        return ts+"</trains>";
     }
 
 }

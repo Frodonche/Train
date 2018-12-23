@@ -35,4 +35,14 @@ public class Reservation {
                 this.id_train+" | numero de place :"+
                 this.num_place+"";
     }
+    
+    public String toXML(){
+        String toReturn = "<reservation>";
+        toReturn += "<identifiant>"+this.id_res+"</identifiant>";
+        toReturn += "<train>"+this.id_train+"</train>";
+        toReturn += "<siege>"+this.num_place+"</siege>";
+        toReturn += "</reservation>";
+        
+        return toReturn;
+    }
 }

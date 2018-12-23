@@ -33,9 +33,9 @@ public class TrainWebService {
     @WebMethod(operationName = "listTrains")
     public String listTrains() throws ParseException {
         Modele m = Modele.getInstance();
-        String ts = "<trains>";
+        String ts = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><trains>";
         for(Train t : m.listTrains()){
-            ts += t.toXML()+"\n";
+            ts += t.toXML();
         }
         ts += "</trains>";
         return ts;
@@ -69,11 +69,11 @@ public class TrainWebService {
     @WebMethod(operationName = "rechercheTrain")
     public String rechercheTrain(@WebParam(name = "villeDepart") String villeDepart, @WebParam(name = "villeArrivee") String villeArrivee, @WebParam(name = "heureDepart") int heureDepart) throws ParseException {        
         Modele m = Modele.getInstance();
-        String ts = "";
+        String ts = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><trains>";
         for(Train t : m.rechercheTrain(villeArrivee, villeDepart, heureDepart)){
-            ts += t.toString() + "|";
+            ts += t.toXML();
         }
-        return ts;
+        return ts+"</trains>";
     }
 
 }
