@@ -53,7 +53,7 @@ public class ReservationWebService {
      * Web service operation
      */
     @WebMethod(operationName = "rechercheReservation")
-    public String rechercheTrain(@WebParam(name = "identifiant_reservation") int id_reservation) throws ParseException {        
+    public String rechercheReservation(@WebParam(name = "identifiant_reservation") int id_reservation) throws ParseException {        
         Modele m = Modele.getInstance();
         String ts = "";
         ts = m.rechercheReservation(id_reservation).toString();
