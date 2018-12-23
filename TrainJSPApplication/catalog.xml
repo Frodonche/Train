@@ -2,4 +2,6 @@
 <catalog xmlns="urn:oasis:names:tc:entity:xmlns:xml:catalog" prefer="system">
     <system systemId="http://localhost:8080/TrainService/TrainWebService?wsdl" uri="src/conf/xml-resources/web-service-references/TrainWebService/wsdl/localhost_8080/TrainService/TrainWebService.wsdl"/>
     <system systemId="http://localhost:8080/TrainService/TrainWebService?xsd=1" uri="src/conf/xml-resources/web-service-references/TrainWebService/wsdl/localhost_8080/TrainService/TrainWebService.xsd_1.xsd"/>
+    <system systemId="http://localhost:8080/TrainService/ReservationWebService?wsdl" uri="src/conf/xml-resources/web-service-references/ReservationWebService/wsdl/localhost_8080/TrainService/ReservationWebService.wsdl"/>
+    <system systemId="http://localhost:8080/TrainService/ReservationWebService?xsd=1" uri="src/conf/xml-resources/web-service-references/ReservationWebService/wsdl/localhost_8080/TrainService/ReservationWebService.xsd_1.xsd"/>
 </catalog>

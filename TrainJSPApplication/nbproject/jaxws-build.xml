@@ -42,5 +42,21 @@
         <delete dir="${build.generated.sources.dir}/jax-ws/trains/src"/>
         <delete dir="${build.generated.dir}/jax-wsCache/TrainWebService"/>
     </target>
-    <target name="wsimport-client-generate" depends="wsimport-client-TrainWebService"/>
+    <target name="wsimport-client-ReservationWebService" depends="wsimport-init">
+        <mkdir dir="${build.generated.dir}/jax-wsCache/ReservationWebService"/>
+        <wsimport sourcedestdir="${build.generated.dir}/jax-wsCache/ReservationWebService" destdir="${build.generated.dir}/jax-wsCache/ReservationWebService" wsdl="${basedir}/${conf-dir}xml-resources/web-service-references/ReservationWebService/wsdl/localhost_8080/TrainService/ReservationWebService.wsdl" catalog="catalog.xml" encoding="${source.encoding}" extension="true" verbose="true" fork="false" wsdlLocation="http://localhost:8080/TrainService/ReservationWebService?wsdl" xnocompile="true" xendorsed="true" package="ClientServlet">
+            <depends file="${basedir}/${conf-dir}xml-resources/web-service-references/ReservationWebService/wsdl/localhost_8080/TrainService/ReservationWebService.wsdl"/>
+            <produces dir="${build.generated.dir}/jax-wsCache/ReservationWebService"/>
+        </wsimport>
+        <copy todir="${build.generated.sources.dir}/jax-ws">
+            <fileset dir="${build.generated.dir}/jax-wsCache/ReservationWebService">
+                <include name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="wsimport-client-clean-ReservationWebService" depends="-init-project">
+        <delete dir="${build.generated.sources.dir}/jax-ws/ClientServlet"/>
+        <delete dir="${build.generated.dir}/jax-wsCache/ReservationWebService"/>
+    </target>
+    <target name="wsimport-client-generate" depends="wsimport-client-TrainWebService, wsimport-client-ReservationWebService"/>
 </project>

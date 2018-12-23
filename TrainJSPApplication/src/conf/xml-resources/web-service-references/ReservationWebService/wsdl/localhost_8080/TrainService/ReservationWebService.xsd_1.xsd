@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is Metro/2.4.0 (wsit240-7e98ff4; 2017-08-03T21:19:54+0200) JAXWS-RI/2.3.0 JAXWS-API/2.3.0 JAXB-RI/2.3.0 JAXB-API/2.3.0 svn-revision#unknown. --><xs:schema xmlns:tns="http://src.trains/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://src.trains/">
+
+<xs:element name="ParseException" type="tns:ParseException"/>
+
+<xs:element name="addReservation" type="tns:addReservation"/>
+
+<xs:element name="addReservationResponse" type="tns:addReservationResponse"/>
+
+<xs:element name="hello" type="tns:hello"/>
+
+<xs:element name="helloResponse" type="tns:helloResponse"/>
+
+<xs:element name="listReservations" type="tns:listReservations"/>
+
+<xs:element name="listReservationsResponse" type="tns:listReservationsResponse"/>
+
+<xs:element name="rechercheReservation" type="tns:rechercheReservation"/>
+
+<xs:element name="rechercheReservationResponse" type="tns:rechercheReservationResponse"/>
+
+<xs:complexType name="rechercheReservation">
+<xs:sequence>
+<xs:element name="identifiant_reservation" type="xs:int"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="rechercheReservationResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="ParseException">
+<xs:sequence>
+<xs:element name="errorOffset" type="xs:int"/>
+<xs:element name="message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="hello">
+<xs:sequence>
+<xs:element name="name" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="helloResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addReservation">
+<xs:sequence>
+<xs:element name="identifiant_train" type="xs:int" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="addReservationResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="listReservations">
+<xs:sequence/>
+</xs:complexType>
+
+<xs:complexType name="listReservationsResponse">
+<xs:sequence>
+<xs:element name="return" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+</xs:schema>

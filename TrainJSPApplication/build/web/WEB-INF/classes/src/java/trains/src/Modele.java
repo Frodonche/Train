@@ -98,7 +98,7 @@ public class Modele {
                     ville_dep = rs.getString("ville_depart");
                     ville_arr = rs.getString("ville_arrivee");
                     heure_dep = rs.getInt("heure_depart");
-                    date = new Date(Date.parse(rs.getString("date")));
+                    date = rs.getDate("date");
                     tmp = new Train(id, ville_dep, ville_arr, date, heure_dep, prix, nb_places);
                     myTrains.add(tmp);
                 } 
@@ -199,22 +199,20 @@ public class Modele {
         return this.myReservations;
     }
     
-    public void addReservation(int id_res, int id_train, int num_place){
-        addReservationSQL(id_res,id_train,num_place);
+    public void addReservation(int id_train){
+        addReservationSQL(id_train);
     }
     
-    private void addReservationSQL(int id_res, int id_train, int num_place){
+    private void addReservationSQL(int id_train){
         PreparedStatement pstmt = null;
-        Train tmp = this.existTrain(id_train);
-        if(tmp!=null)
+        int nb_places = this.existTrain(id_train).getPlaces()-1;
         try
         {
-            int nb_places = tmp.getPlaces()-1;
-            pstmt = con.prepareStatement("insert into reservation values ( ? , ? , ?)");
-            pstmt.setInt(1, id_res);
-            pstmt.setInt(2, id_train);
-            pstmt.setInt(3, num_place);
+            pstmt = con.prepareStatement("insert into RESERVATION(id_train,numero_place) values( ?, ? )");
+            pstmt.setInt(1, id_train);
+            pstmt.setInt(2, nb_places+1);
             pstmt.executeUpdate();
+
             this.updateReservationList();
             pstmt = con.prepareStatement("update train set nb_places_dispo=? where id=?");
             pstmt.setInt(1, nb_places);
