@@ -21,6 +21,7 @@
     </head>
     <body>
         <h1>Liste des trains disponibles : </h1>
+           <form method="post" action="HelloWorldServlet"> <!-- Formulaire permettant l'affichage des radio button et de la confirmation de la reservation -->
             <table>
             <tr>
               <th>Identifiant</th>
@@ -30,6 +31,7 @@
               <th>Prix du billet</th>
               <th>Places restantes</th>
             </tr>
+               
 <%
             try {
                 trains.src.TrainWebService_Service service = new trains.src.TrainWebService_Service();
@@ -62,6 +64,9 @@
                         
                         
                         tr += "<tr><td>" +
+                                
+                                 "<input type=\"radio\" name=\"identifiant_train\" value=\""+identifiant+"\">" + "</td><td>"+ // Radio button pour choisir un train par son id
+                                
                                 identifiant + "</td><td>"+
                                 villeDepart + "</td><td>"+
                                 villeArrivee + "</td><td>"+
@@ -75,9 +80,12 @@
                 out.println(tr);
             } catch (Exception ex) {
                 // TODO handle custom exceptions here
-            }            
+            } 
+
             %>
             
             </table>
+            <input type="submit" value="Reserver">
+           </form>
     </body>
 </html>
