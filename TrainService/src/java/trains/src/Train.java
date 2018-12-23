@@ -68,4 +68,18 @@ public class Train {
                this.prixBillet + " " +
                this.places + " \n";
     }
+    
+    public String toXML(){
+        String toReturn = "<train>";
+        toReturn += "<identifiant>"+identifiant+"</identifiant>";
+        toReturn += "<villeDepart>"+villeDepart+"</villeDepart>";
+        toReturn += "<villeArrivee>"+villeArrivee+"</villeArrivee>";
+        toReturn += "<heureDepart>"+heureDepart+"</heureDepart>";
+        toReturn += "<prixBillet>"+prixBillet+"</prixBillet>";
+        toReturn += "<places>"+places+"</places>";
+        toReturn += "</train>";
+        
+        return toReturn;
+    }
+
 }

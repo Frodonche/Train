@@ -96,4 +96,12 @@ public class TrainServlet extends HttpServlet {
         return port.rechercheTrain(villeDepart, villeArrivee, heureDepart);
     }
 
+    
+    private String listTrains() throws ParseException_Exception {
+        // Note that the injected javax.xml.ws.Service reference as well as port objects are not thread safe.
+        // If the calling of port operations may lead to race condition some synchronization is required.
+        trains.src.TrainWebService port = service.getTrainWebServicePort();
+        return port.listTrains();
+    }
+
 }
