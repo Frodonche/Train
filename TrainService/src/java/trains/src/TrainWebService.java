@@ -33,11 +33,11 @@ public class TrainWebService {
     @WebMethod(operationName = "listTrains")
     public String listTrains() throws ParseException {
         Modele m = Modele.getInstance();
-        String ts = "";
+        String ts = "<trains>";
         for(Train t : m.listTrains()){
-            ts += t.toString() + "\n";
-            System.out.println(t);
+            ts += t.toXML()+"\n";
         }
+        ts += "</trains>";
         return ts;
     }
 
@@ -53,8 +53,12 @@ public class TrainWebService {
         if(parse.before(new Date())){
             return "dateDepart must be later than current Date";
         } else {
-            m.addTrain(identifiant, villeDepart, villeArrivee, parse, heureDepart, prixBillet, places);
-            return "Ok";
+            if(m.searchTrain(identifiant) != null){                   
+                return "Train with id : " + identifiant + " already exist.";
+            } else {
+                m.addTrain(identifiant, villeDepart, villeArrivee, parse, heureDepart, prixBillet, places);
+                return "Ok";                
+            }
         }
     }
     
@@ -66,7 +70,7 @@ public class TrainWebService {
         Modele m = Modele.getInstance();
         String ts = "";
         for(Train t : m.rechercheTrain(villeArrivee, villeDepart, heureDepart)){
-            ts += t.toString() + "\n";
+            ts += t.toString() + "|";
         }
         return ts;
     }
